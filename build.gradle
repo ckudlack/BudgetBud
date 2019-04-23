@@ -33,4 +33,7 @@ ext {
     epoxy_version = '3.4.2'
     mvrx_version = '1.0.0'
     eventbus_version = '3.1.1'
+    retrofitVersion = '2.5.0'
+    moshiVersion = '1.6.0'
+    roomVersion = '2.0.0'
 }
