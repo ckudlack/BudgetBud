@@ -1,4 +1,4 @@
-package com.cdk.budgetbud
+package com.cdk.budgetbud.view
 
 import androidx.annotation.DimenRes
 

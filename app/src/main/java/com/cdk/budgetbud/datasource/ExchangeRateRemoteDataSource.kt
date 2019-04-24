@@ -1,6 +1,6 @@
 package com.cdk.budgetbud.datasource
 
-import com.cdk.budgetbud.ExchangeRateService
+import com.cdk.budgetbud.network.ExchangeRateService
 import com.cdk.budgetbud.repository.ExchangeRateContract
 import com.cdk.budgetbud.room.CurrencyValue
 import io.reactivex.Observable

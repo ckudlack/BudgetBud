@@ -2,6 +2,7 @@ package com.cdk.budgetbud
 
 import com.cdk.budgetbud.datasource.ExchangeRateLocalDataSource
 import com.cdk.budgetbud.datasource.ExchangeRateRemoteDataSource
+import com.cdk.budgetbud.network.ExchangeRateService
 import com.cdk.budgetbud.repository.ExchangeRateContract
 import com.cdk.budgetbud.repository.ExchangeRateRepository
 import com.cdk.budgetbud.room.BudgetBudDatabase

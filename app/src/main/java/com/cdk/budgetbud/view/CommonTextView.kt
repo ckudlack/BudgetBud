@@ -1,4 +1,4 @@
-package com.cdk.budgetbud
+package com.cdk.budgetbud.view
 
 import android.content.Context
 import android.text.Html
@@ -12,6 +12,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
+import com.cdk.budgetbud.R
 import org.jetbrains.anko.dimen
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)

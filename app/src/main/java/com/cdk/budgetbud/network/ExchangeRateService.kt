@@ -1,4 +1,4 @@
-package com.cdk.budgetbud
+package com.cdk.budgetbud.network
 
 import com.cdk.budgetbud.response.AllRatesResponse
 import io.reactivex.Observable
