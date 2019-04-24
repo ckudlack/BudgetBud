@@ -6,7 +6,7 @@ import io.reactivex.Observable
 interface ExchangeRateContract {
     interface Repository {
         fun setExchangeRates(rates: List<CurrencyValue>)
-        fun getExchangeRates(): Observable<List<CurrencyValue>>
+        fun getExchangeRates(apiKey: String, baeCurrencyCode: String): Observable<List<CurrencyValue>>
     }
 
     interface LocalDataSource {
