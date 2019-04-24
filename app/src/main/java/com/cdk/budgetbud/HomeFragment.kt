@@ -1,10 +1,14 @@
 package com.cdk.budgetbud
 
-import com.cdk.budgetbud.mvrx.MvRxEpoxyController
+import com.airbnb.mvrx.activityViewModel
+import com.cdk.budgetbud.mvrx.simpleController
+import com.cdk.budgetbud.viewmodel.ExchangeRateViewModel
 
 class HomeFragment : BaseFragment() {
 
-    override fun epoxyController(): MvRxEpoxyController {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private val exchangeRateViewModel: ExchangeRateViewModel by activityViewModel()
+
+    override fun epoxyController() = simpleController(exchangeRateViewModel) { exchangeRateState ->
+
     }
 }
