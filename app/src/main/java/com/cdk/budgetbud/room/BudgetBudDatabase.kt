@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [CurrencyValue::class], version = 1)
 public abstract class BudgetBudDatabase : RoomDatabase() {
-    abstract fun currencyDao(): BudgetBudDAO
+    abstract fun currencyDao(): ExchangeRateDAO
 
     companion object {
         @Volatile
