@@ -7,9 +7,9 @@ import com.cdk.budgetbud.room.CurrencyValue
 import org.koin.android.ext.android.inject
 
 data class ExchangeRateState(
-    val conversionRate: Double,
-    val exchangeRates: List<CurrencyValue>,
-    val exchangeRatesRequest: Async<List<CurrencyValue>>
+    val conversionRate: Double = 0.0,
+    val exchangeRates: List<CurrencyValue> = emptyList(),
+    val exchangeRatesRequest: Async<List<CurrencyValue>> = Uninitialized
 ) : MvRxState
 
 class ExchangeRateViewModel(

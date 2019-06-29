@@ -12,7 +12,7 @@ class ExchangeRateRepository(
         return localDataSource.setExchangeRates(rates)
     }
 
-    override fun getExchangeRates(apiKey: String, baeCurrencyCode: String): Observable<List<CurrencyValue>> {
-        return remoteDataSource.getExchangeRates(,)
+    override fun getExchangeRates(apiKey: String, baseCurrencyCode: String): Observable<List<CurrencyValue>> {
+        return remoteDataSource.getExchangeRates(apiKey, baseCurrencyCode)
     }
 }

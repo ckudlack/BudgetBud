@@ -15,19 +15,19 @@ class HomeFragment : BaseFragment() {
     private val exchangeRateViewModel: ExchangeRateViewModel by activityViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        record_speech_button.setOnClickListener {
+        /*record_speech_button.setOnClickListener {
 
             processValue("Spent 10000 pesos on lunch")
 
 
-            /*val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             intent.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             )
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Record Value")
-            startActivityForResult(intent, 1111)*/
-        }
+            startActivityForResult(intent, 1111)
+        }*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,9 +1,10 @@
 package com.cdk.budgetbud.room
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Entity(tableName = "exchange_rate_table")
 class CurrencyValue(
-    val name: String,
+    @PrimaryKey val name: String,
     val amount: Double
 )
