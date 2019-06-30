@@ -1,25 +1,28 @@
 package com.cdk.budgetbud
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import com.airbnb.mvrx.activityViewModel
 import com.cdk.budgetbud.mvrx.simpleController
+import com.cdk.budgetbud.viewmodel.BudgetItemViewModel
 import com.cdk.budgetbud.viewmodel.ExchangeRateViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : BaseFragment() {
 
     private val exchangeRateViewModel: ExchangeRateViewModel by activityViewModel()
+    private val budgetItemViewModel: BudgetItemViewModel by activityViewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        layout = R.layout.fragment_home
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*record_speech_button.setOnClickListener {
-
-            processValue("Spent 10000 pesos on lunch")
-
-
+        record_item_button.setOnClickListener {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             intent.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -27,17 +30,16 @@ class HomeFragment : BaseFragment() {
             )
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Record Value")
             startActivityForResult(intent, 1111)
-        }*/
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK && null != data) {
-            val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            val speechResult = results.first()
-            speech_result.text = speechResult
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && null != data) {
+            val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val speechResult = results.first()
+            budgetItemViewModel.saveBudgetItem(speechResult)
+        }
+    }
 
     private fun processValue(text: String) {
         val words = text.split(' ')
@@ -60,11 +62,12 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        speech_result.text = "You just spent $amount $currency on $subject"
+//        speech_result.text = "You just spent $amount $currency on $subject"
 
     }
 
     override fun epoxyController() = simpleController(exchangeRateViewModel) { exchangeRateState ->
+
 
     }
 

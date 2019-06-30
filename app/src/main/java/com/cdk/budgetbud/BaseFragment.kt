@@ -22,6 +22,8 @@ abstract class BaseFragment : BaseMvRxFragment() {
     protected lateinit var coordinatorLayout: CoordinatorLayout
     protected val epoxyController by lazy { epoxyController() }
 
+    protected var layout = R.layout.fragment_base_mvrx
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         epoxyController.onRestoreInstanceState(savedInstanceState)
@@ -32,7 +34,7 @@ abstract class BaseFragment : BaseMvRxFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_base_mvrx, container, false).apply {
+        return inflater.inflate(layout, container, false).apply {
             recyclerView = findViewById(R.id.recycler_view)
             toolbar = findViewById(R.id.toolbar)
             coordinatorLayout = findViewById(R.id.coordinator_layout)
