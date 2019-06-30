@@ -8,4 +8,12 @@ interface BudgetItemContract {
     interface Repository {
         fun saveBudgetItem(item: BudgetItem): Completable
     }
+
+    interface LocalDataSource {
+        fun saveBudgetItem(item: BudgetItem): Completable
+    }
+
+    interface RemoteDataSource {
+        fun saveBudgetItem(item: BudgetItem): Completable
+    }
 }

@@ -7,6 +7,7 @@ import android.speech.RecognizerIntent
 import android.view.View
 import com.airbnb.mvrx.activityViewModel
 import com.cdk.budgetbud.mvrx.simpleController
+import com.cdk.budgetbud.view.commonTextView
 import com.cdk.budgetbud.viewmodel.BudgetItemViewModel
 import com.cdk.budgetbud.viewmodel.ExchangeRateViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -41,34 +42,13 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun processValue(text: String) {
-        val words = text.split(' ')
-        var amount: Int? = null
-        var currency: String? = null
-        var article: String? = null
-        var subject: String? = null
-
-        // "Spent ten thousand pesos on dinner"
-        // "[Trigger] [amount] [subject]"
-        if (words.first().toLowerCase() == "spent" || words.first().toLowerCase() == "payed") {
-
-            words.forEachIndexed { index, word ->
-                when (index) {
-                    1 -> word.toIntOrNull()?.let { amount = it }
-                    2 -> currency = word
-                    3 -> article = word
-                    4 -> subject = word
-                }
+    override fun epoxyController() = simpleController(budgetItemViewModel) { budgetItemState ->
+        budgetItemState.budgetItems.forEachIndexed { index, budgetItem ->
+            commonTextView {
+                id("id_$index")
+                body("${budgetItem.name} : ${budgetItem.cost}")
             }
         }
-
-//        speech_result.text = "You just spent $amount $currency on $subject"
-
-    }
-
-    override fun epoxyController() = simpleController(exchangeRateViewModel) { exchangeRateState ->
-
-
     }
 
     companion object {

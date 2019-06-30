@@ -26,6 +26,7 @@ class BudgetItemViewModel(
         }
     }
 
+    // TODO: improve this
     private fun processItemString(itemString: String): BudgetItem {
         val words = itemString.split(' ')
         var amount: Double? = null
