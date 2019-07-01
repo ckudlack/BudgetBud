@@ -1,11 +1,16 @@
 package com.cdk.budgetbud
 
+import com.cdk.budgetbud.datasource.BudgetItemLocalDataSource
+import com.cdk.budgetbud.datasource.BudgetItemRemoteDataSource
 import com.cdk.budgetbud.datasource.ExchangeRateLocalDataSource
 import com.cdk.budgetbud.datasource.ExchangeRateRemoteDataSource
 import com.cdk.budgetbud.network.ExchangeRateService
+import com.cdk.budgetbud.repository.BudgetItemContract
+import com.cdk.budgetbud.repository.BudgetItemRepository
 import com.cdk.budgetbud.repository.ExchangeRateContract
 import com.cdk.budgetbud.repository.ExchangeRateRepository
 import com.cdk.budgetbud.room.BudgetBudDatabase
+import com.cdk.budgetbud.viewmodel.BudgetItemViewModel
 import com.cdk.budgetbud.viewmodel.ExchangeRateViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -30,19 +35,25 @@ val serviceModule = module {
 
 val viewModelModule = module {
     viewModel { ExchangeRateViewModel(get(), get()) }
+    viewModel { BudgetItemViewModel(get(), get()) }
 }
 
 val repositoryModule = module {
     single<ExchangeRateContract.Repository> { ExchangeRateRepository(get(), get()) }
+    single<BudgetItemContract.Repository> { BudgetItemRepository(get(), get()) }
 }
 
 val dataSourceModule = module {
     single<ExchangeRateContract.RemoteDataSource> { ExchangeRateRemoteDataSource(get()) }
     single<ExchangeRateContract.LocalDataSource> { ExchangeRateLocalDataSource(get()) }
+
+    single<BudgetItemContract.LocalDataSource> { BudgetItemLocalDataSource(get()) }
+    single<BudgetItemContract.RemoteDataSource> { BudgetItemRemoteDataSource() }
 }
 
 val daoModule = module {
     single { BudgetBudDatabase.getDatabase(androidApplication()).currencyDao() }
+    single { BudgetBudDatabase.getDatabase(androidApplication()).budgetItemDao() }
 }
 
 val appModules = listOf(serviceModule, viewModelModule, repositoryModule, dataSourceModule, daoModule)

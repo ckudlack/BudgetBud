@@ -1,22 +1,42 @@
 package com.cdk.budgetbud.viewmodel
 
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Uninitialized
 import com.cdk.budgetbud.mvrx.MvRxViewModel
 import com.cdk.budgetbud.repository.BudgetItemContract
 
 data class BudgetItem(
     val name: String,
-    val cost: Double
+    val cost: Double,
+    val time: Long
 )
 
 data class BudgetItemState(
-    val budgetItems: List<BudgetItem> = emptyList()
+    val budgetItems: List<BudgetItem> = emptyList(),
+    val getBudgetItemsRequest: Async<List<BudgetItem>> = Uninitialized
 ) : MvRxState
 
 class BudgetItemViewModel(
     budgetItemState: BudgetItemState,
     private val repository: BudgetItemContract.Repository
 ) : MvRxViewModel<BudgetItemState>(budgetItemState) {
+
+    init {
+        getBudgetItems()
+    }
+
+    private fun getBudgetItems() {
+        withState { state ->
+            if (state.getBudgetItemsRequest is Loading) return@withState
+
+            repository.getBudgetItems()
+                .execute {
+                    copy(budgetItems = it() ?: emptyList())
+                }
+        }
+    }
 
     // itemString example: "Spent 20 dollars on dinner"
     fun saveBudgetItem(itemString: String) {
@@ -48,7 +68,7 @@ class BudgetItemViewModel(
             }
         }
 
-        return BudgetItem(subject!!, amount!!)
+        return BudgetItem(subject!!, amount!!, System.currentTimeMillis())
 
 //        speech_result.text = "You just spent $amount $currency on $subject"
     }

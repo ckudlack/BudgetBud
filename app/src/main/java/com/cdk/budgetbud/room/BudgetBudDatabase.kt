@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [CurrencyValue::class], version = 1)
+@Database(entities = [CurrencyValue::class, RoomBudgetItem::class], version = 1)
 public abstract class BudgetBudDatabase : RoomDatabase() {
     abstract fun currencyDao(): ExchangeRateDAO
+    abstract fun budgetItemDao(): BudgetItemDAO
 
     companion object {
         @Volatile
