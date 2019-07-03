@@ -1,11 +1,22 @@
 package com.cdk.budgetbud.viewmodel
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.*
+import com.cdk.budgetbud.BudgetItemMapper
 import com.cdk.budgetbud.mvrx.MvRxViewModel
 import com.cdk.budgetbud.repository.BudgetItemContract
+import org.koin.android.ext.android.inject
+import java.text.DecimalFormat
+import java.util.*
+
+enum class BudgetViewType {
+    ITEM,
+    HEADER
+}
+
+data class BudgetViewItem(
+    val value: String,
+    val type: BudgetViewType
+)
 
 data class BudgetItem(
     val name: String,
@@ -14,7 +25,7 @@ data class BudgetItem(
 )
 
 data class BudgetItemState(
-    val budgetItems: List<BudgetItem> = emptyList(),
+    val budgetItems: List<BudgetViewItem> = emptyList(),
     val getBudgetItemsRequest: Async<List<BudgetItem>> = Uninitialized
 ) : MvRxState
 
@@ -33,7 +44,10 @@ class BudgetItemViewModel(
 
             repository.getBudgetItems()
                 .execute {
-                    copy(budgetItems = it() ?: emptyList())
+                    copy(
+                        getBudgetItemsRequest = it,
+                        budgetItems = BudgetItemMapper.toBudgetViewItemList(it() ?: emptyList())
+                    )
                 }
         }
     }
@@ -43,6 +57,12 @@ class BudgetItemViewModel(
         withState { state ->
             val budgetItem = processItemString(itemString)
             repository.saveBudgetItem(budgetItem)
+                .andThen(repository.getBudgetItems()).execute {
+                    copy(
+                        getBudgetItemsRequest = it,
+                        budgetItems = BudgetItemMapper.toBudgetViewItemList(it() ?: emptyList())
+                    )
+                }
         }
     }
 
@@ -55,21 +75,31 @@ class BudgetItemViewModel(
         var subject: String? = null
 
         // "Spent ten thousand pesos on dinner"
+        // "spent $40 on food"
+        // "spent 40 on food"
         // "[Trigger] [amount] [subject]"
         if (words.first().toLowerCase() == "spent" || words.first().toLowerCase() == "payed") {
 
             words.forEachIndexed { index, word ->
                 when (index) {
-                    1 -> word.toDoubleOrNull()?.let { amount = it }
+                    1 -> {
+                        val cost = DecimalFormat.getCurrencyInstance(Locale.getDefault()).parse(word)
+                        amount = cost.toDouble()
+                    }
                     2 -> currency = word
-                    3 -> article = word
-                    4 -> subject = word
+                    3 -> subject = word
+//                    4 -> subject = word
                 }
             }
         }
 
         return BudgetItem(subject!!, amount!!, System.currentTimeMillis())
+    }
 
-//        speech_result.text = "You just spent $amount $currency on $subject"
+    companion object : MvRxViewModelFactory<BudgetItemViewModel, BudgetItemState> {
+        override fun create(viewModelContext: ViewModelContext, state: BudgetItemState): BudgetItemViewModel? {
+            val repository: BudgetItemContract.Repository by viewModelContext.activity.inject()
+            return BudgetItemViewModel(state, repository)
+        }
     }
 }

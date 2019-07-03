@@ -23,6 +23,8 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        toolbar.visibility = View.GONE
+
         record_item_button.setOnClickListener {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             intent.putExtra(
@@ -46,7 +48,7 @@ class HomeFragment : BaseFragment() {
         budgetItemState.budgetItems.forEachIndexed { index, budgetItem ->
             commonTextView {
                 id("id_$index")
-                body("${budgetItem.name} : ${budgetItem.cost}")
+                body(budgetItem.value)
             }
         }
     }
