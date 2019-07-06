@@ -10,7 +10,7 @@ interface BudgetItemDAO {
     @Insert
     fun addBudgetItem(item: RoomBudgetItem)
 
-    @Query("SELECT * from budget_item_table ORDER BY time ASC")
+    @Query("SELECT * from budget_item_table ORDER BY time DESC")
     fun getBudgetItems(): List<RoomBudgetItem>
 
     @Query("SELECT * from budget_item_table WHERE name LIKE :id")
