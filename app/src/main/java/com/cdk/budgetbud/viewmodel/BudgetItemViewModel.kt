@@ -6,6 +6,7 @@ import com.cdk.budgetbud.mvrx.MvRxViewModel
 import com.cdk.budgetbud.repository.BudgetItemContract
 import org.koin.android.ext.android.inject
 import java.text.DecimalFormat
+import java.text.ParseException
 import java.util.*
 
 enum class BudgetViewType {
@@ -66,7 +67,7 @@ class BudgetItemViewModel(
         }
     }
 
-    // TODO: improve this
+    // TODO: improve this -  needs to be more flexible
     private fun processItemString(itemString: String): BudgetItem {
         val words = itemString.split(' ')
         var amount: Double? = null
@@ -83,8 +84,12 @@ class BudgetItemViewModel(
             words.forEachIndexed { index, word ->
                 when (index) {
                     1 -> {
-                        val cost = DecimalFormat.getCurrencyInstance(Locale.getDefault()).parse(word)
-                        amount = cost.toDouble()
+                        amount = try {
+                            val cost = DecimalFormat.getCurrencyInstance(Locale.getDefault()).parse(word)
+                            cost.toDouble()
+                        } catch (ex: ParseException) {
+                            word.toDouble()
+                        }
                     }
                     2 -> currency = word
                     3 -> subject = word
