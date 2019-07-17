@@ -96,6 +96,8 @@ class BudgetItemViewModel(
 //                    4 -> subject = word
                 }
             }
+        } else {
+
         }
 
         return BudgetItem(subject!!, amount!!, System.currentTimeMillis())
