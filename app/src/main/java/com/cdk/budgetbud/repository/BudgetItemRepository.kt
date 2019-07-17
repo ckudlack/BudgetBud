@@ -10,15 +10,11 @@ class BudgetItemRepository(
     private val remoteDataSource: BudgetItemContract.RemoteDataSource
 ) : BudgetItemContract.Repository {
 
-    override fun getBudgetItemsForDate(date: LocalDate): Observable<List<BudgetItem>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getBudgetItemsForDate(date: LocalDate): Observable<List<BudgetItem>> =
+        localDataSource.getBudgetItemsForDate(date)
 
-    override fun getBudgetItems(): Observable<List<BudgetItem>> {
-        return localDataSource.getBudgetItems()
-    }
+    override fun getBudgetItems(): Observable<List<BudgetItem>> = localDataSource.getBudgetItems()
 
-    override fun saveBudgetItem(item: BudgetItem): Completable {
-        return localDataSource.saveBudgetItem(item).andThen(remoteDataSource.saveBudgetItem(item))
-    }
+    override fun saveBudgetItem(item: BudgetItem): Completable =
+        localDataSource.saveBudgetItem(item).andThen(remoteDataSource.saveBudgetItem(item))
 }

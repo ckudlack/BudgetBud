@@ -7,6 +7,7 @@ import com.cdk.budgetbud.repository.BudgetItemContract
 import org.koin.android.ext.android.inject
 import java.text.DecimalFormat
 import java.text.ParseException
+import java.time.LocalDate
 import java.util.*
 
 enum class BudgetViewType {
@@ -59,6 +60,18 @@ class BudgetItemViewModel(
             val budgetItem = processItemString(itemString)
             repository.saveBudgetItem(budgetItem)
                 .andThen(repository.getBudgetItems()).execute {
+                    copy(
+                        getBudgetItemsRequest = it,
+                        budgetItems = BudgetItemMapper.toBudgetViewItemList(it() ?: emptyList())
+                    )
+                }
+        }
+    }
+
+    fun getBudgetItemsForDate(date: LocalDate) {
+        withState { state ->
+            repository.getBudgetItemsForDate(date)
+                .execute {
                     copy(
                         getBudgetItemsRequest = it,
                         budgetItems = BudgetItemMapper.toBudgetViewItemList(it() ?: emptyList())
