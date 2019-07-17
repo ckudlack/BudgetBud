@@ -58,13 +58,16 @@ class BudgetItemViewModel(
     fun saveBudgetItem(itemString: String) {
         withState { state ->
             val budgetItem = processItemString(itemString)
-            repository.saveBudgetItem(budgetItem)
-                .andThen(repository.getBudgetItems()).execute {
-                    copy(
-                        getBudgetItemsRequest = it,
-                        budgetItems = BudgetItemMapper.toBudgetViewItemList(it() ?: emptyList())
-                    )
-                }
+
+            budgetItem?.let {
+                repository.saveBudgetItem(budgetItem)
+                    .andThen(repository.getBudgetItems()).execute {
+                        copy(
+                            getBudgetItemsRequest = it,
+                            budgetItems = BudgetItemMapper.toBudgetViewItemList(it() ?: emptyList())
+                        )
+                    }
+            }
         }
     }
 
@@ -80,8 +83,8 @@ class BudgetItemViewModel(
         }
     }
 
-    // TODO: improve this -  needs to be more flexible
-    private fun processItemString(itemString: String): BudgetItem {
+    // TODO: improve this -  needs to be more flexible. And move into own class
+    private fun processItemString(itemString: String): BudgetItem? {
         val words = itemString.split(' ')
         var amount: Double? = null
         var currency: String? = null
@@ -93,7 +96,6 @@ class BudgetItemViewModel(
         // "spent 40 on food"
         // "[Trigger] [amount] [subject]"
         if (words.first().toLowerCase() == "spent" || words.first().toLowerCase() == "payed") {
-
             words.forEachIndexed { index, word ->
                 when (index) {
                     1 -> {
@@ -110,7 +112,25 @@ class BudgetItemViewModel(
                 }
             }
         } else {
+            val firstWord = words.first()
 
+            amount = try {
+                val cost = DecimalFormat.getCurrencyInstance(Locale.getDefault()).parse(firstWord)
+                cost.toDouble()
+            } catch (ex: ParseException) {
+                firstWord.toDoubleOrNull()
+            }
+
+            if (amount != null) {
+                words.forEachIndexed { index, word ->
+                    when (index) {
+                        1 -> currency = word
+                        2 -> subject = word
+                    }
+                }
+            } else {
+                return null
+            }
         }
 
         return BudgetItem(subject!!, amount!!, System.currentTimeMillis())

@@ -9,6 +9,7 @@ import com.airbnb.mvrx.activityViewModel
 import com.cdk.budgetbud.mvrx.simpleController
 import com.cdk.budgetbud.view.commonTextView
 import com.cdk.budgetbud.viewmodel.BudgetItemViewModel
+import com.cdk.budgetbud.viewmodel.BudgetViewType
 import com.cdk.budgetbud.viewmodel.ExchangeRateViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -46,9 +47,17 @@ class HomeFragment : BaseFragment() {
 
     override fun epoxyController() = simpleController(budgetItemViewModel) { budgetItemState ->
         budgetItemState.budgetItems.forEachIndexed { index, budgetItem ->
-            commonTextView {
-                id("id_$index")
-                body(budgetItem.value)
+            when (budgetItem.type) {
+                BudgetViewType.HEADER -> commonTextView {
+                    id("id_$index")
+                    body(budgetItem.value)
+                    textAppearance(R.style.BudgetItemHeader)
+                }
+                BudgetViewType.ITEM -> commonTextView {
+                    id("id_$index")
+                    body(budgetItem.value)
+                    textAppearance(R.style.BudgetItem)
+                }
             }
         }
     }
