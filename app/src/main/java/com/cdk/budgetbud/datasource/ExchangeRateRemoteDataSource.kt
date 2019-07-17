@@ -10,9 +10,16 @@ class ExchangeRateRemoteDataSource(private val exchangeRateService: ExchangeRate
 
     override fun getExchangeRates(apiKey: String, baseCurrencyCode: String): Observable<List<CurrencyValue>> {
         return exchangeRateService.getAllExchangeRates(apiKey, baseCurrencyCode).map { ratesResponse ->
-            val rates = mutableListOf<CurrencyValue>()
-            ratesResponse.rates?.forEach { rates.add(CurrencyValue(it.key, it.value)) }
-            return@map rates
+            mutableListOf<CurrencyValue>().apply {
+                ratesResponse.rates?.forEach {
+                    add(
+                        CurrencyValue(
+                            it.key,
+                            it.value
+                        )
+                    )
+                }
+            }
         }
     }
 }
