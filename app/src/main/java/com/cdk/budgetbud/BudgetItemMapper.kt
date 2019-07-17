@@ -21,10 +21,8 @@ object BudgetItemMapper {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val previousInstant = Instant.ofEpochMilli(previousItem.time)
+                    val thisDate = Instant.ofEpochMilli(budgetItem.time).atZone(ZoneId.systemDefault())
 
-                    val thisInstant = Instant.ofEpochMilli(budgetItem.time)
-
-                    val thisDate = thisInstant.atZone(ZoneId.systemDefault())
                     if (previousInstant.atZone(ZoneId.systemDefault()).dayOfYear != thisDate.dayOfYear) {
                         addHeaderItem(thisDate, viewItems)
                         addBudgetItem(viewItems, budgetItem)
@@ -36,9 +34,7 @@ object BudgetItemMapper {
                 }
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                    val thisInstant = Instant.ofEpochMilli(budgetItem.time)
-                    val thisDate = thisInstant.atZone(ZoneId.systemDefault())
+                    val thisDate = Instant.ofEpochMilli(budgetItem.time).atZone(ZoneId.systemDefault())
 
                     addHeaderItem(thisDate, viewItems)
                     addBudgetItem(viewItems, budgetItem)
@@ -54,7 +50,7 @@ object BudgetItemMapper {
         viewItems: MutableList<BudgetViewItem>,
         budgetItem: BudgetItem
     ) {
-        viewItems.add(BudgetViewItem("${budgetItem.name} :$${budgetItem.cost}", BudgetViewType.ITEM))
+        viewItems.add(BudgetViewItem("${budgetItem.name} : $${budgetItem.cost}", BudgetViewType.ITEM))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -62,8 +58,7 @@ object BudgetItemMapper {
         thisDate: ZonedDateTime,
         viewItems: MutableList<BudgetViewItem>
     ) {
-        val f = DateTimeFormatter.ofPattern("MMM dd")
-        val output = thisDate.format(f)
+        val output = thisDate.format(DateTimeFormatter.ofPattern("MMM dd"))
         viewItems.add(BudgetViewItem(output, BudgetViewType.HEADER))
     }
 
