@@ -1,11 +1,13 @@
 package com.cdk.budgetbud
 
 import android.os.Build
+import androidx.annotation.RequiresApi
 import com.cdk.budgetbud.viewmodel.BudgetItem
 import com.cdk.budgetbud.viewmodel.BudgetViewItem
 import com.cdk.budgetbud.viewmodel.BudgetViewType
 import java.time.Instant
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 object BudgetItemMapper {
@@ -24,12 +26,10 @@ object BudgetItemMapper {
 
                     val thisDate = thisInstant.atZone(ZoneId.systemDefault())
                     if (previousInstant.atZone(ZoneId.systemDefault()).dayOfYear != thisDate.dayOfYear) {
-                        val f = DateTimeFormatter.ofPattern("MM/dd/uuuu")
-                        val output = thisDate.format(f)
-                        viewItems.add(BudgetViewItem(output, BudgetViewType.HEADER))
-                        viewItems.add(BudgetViewItem("${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
+                        addHeaderItem(thisDate, viewItems)
+                        addBudgetItem(viewItems, budgetItem)
                     } else {
-                        viewItems.add(BudgetViewItem("${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
+                        addBudgetItem(viewItems, budgetItem)
                     }
                 } else {
                     TODO("VERSION.SDK_INT < O")
@@ -40,16 +40,31 @@ object BudgetItemMapper {
                     val thisInstant = Instant.ofEpochMilli(budgetItem.time)
                     val thisDate = thisInstant.atZone(ZoneId.systemDefault())
 
-                    val f = DateTimeFormatter.ofPattern("MM/dd/uuuu")
-                    val output = thisDate.format(f)
-                    viewItems.add(BudgetViewItem(output, BudgetViewType.HEADER))
-                    viewItems.add(BudgetViewItem("${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
+                    addHeaderItem(thisDate, viewItems)
+                    addBudgetItem(viewItems, budgetItem)
                 } else {
                     TODO("VERSION.SDK_INT < O")
                 }
             }
         }
         return viewItems
+    }
+
+    private fun addBudgetItem(
+        viewItems: MutableList<BudgetViewItem>,
+        budgetItem: BudgetItem
+    ) {
+        viewItems.add(BudgetViewItem("${budgetItem.name} :$${budgetItem.cost}", BudgetViewType.ITEM))
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun addHeaderItem(
+        thisDate: ZonedDateTime,
+        viewItems: MutableList<BudgetViewItem>
+    ) {
+        val f = DateTimeFormatter.ofPattern("MMM dd")
+        val output = thisDate.format(f)
+        viewItems.add(BudgetViewItem(output, BudgetViewType.HEADER))
     }
 
     fun toBudgetViewItemListCompressDays(items: List<BudgetItem>): List<BudgetViewItem> {
