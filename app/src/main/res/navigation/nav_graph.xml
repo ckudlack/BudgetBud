@@ -4,6 +4,14 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.cdk.budgetbud.HomeFragment"
-        android:label="HomeFragment" />
+        android:name="com.cdk.budgetbud.fragment.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+                android:id="@+id/action_homeFragment_to_budgetItemFragment"
+                app:destination="@id/budgetItemFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/budgetItemFragment"
+            android:name="com.cdk.budgetbud.fragment.BudgetItemFragment"
+            android:label="BudgetItemFragment"/>
 </navigation>

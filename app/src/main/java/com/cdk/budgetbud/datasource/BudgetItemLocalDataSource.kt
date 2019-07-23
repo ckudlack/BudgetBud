@@ -22,14 +22,14 @@ class BudgetItemLocalDataSource(private val budgetItemDAO: BudgetItemDAO) : Budg
                 startOfDay + ONE_DAY
             )
         )
-            .map { BudgetItem(it.name, it.cost, it.time) }
+            .map { BudgetItem(it.id, it.name, it.cost, it.time) }
             .toList()
             .toObservable()
     }
 
     override fun getBudgetItems(): Observable<List<BudgetItem>> {
         return Observable.fromIterable(budgetItemDAO.getBudgetItems())
-            .map { BudgetItem(it.name, it.cost, it.time) }
+            .map { BudgetItem(it.id, it.name, it.cost, it.time) }
             .toList()
             .toObservable()
     }

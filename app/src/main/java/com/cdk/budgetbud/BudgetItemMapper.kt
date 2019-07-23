@@ -50,7 +50,7 @@ object BudgetItemMapper {
         viewItems: MutableList<BudgetViewItem>,
         budgetItem: BudgetItem
     ) {
-        viewItems.add(BudgetViewItem("${budgetItem.name} : $${budgetItem.cost}", BudgetViewType.ITEM))
+        viewItems.add(BudgetViewItem(budgetItem.id!!, "${budgetItem.name} : $${budgetItem.cost}", BudgetViewType.ITEM))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -59,7 +59,7 @@ object BudgetItemMapper {
         viewItems: MutableList<BudgetViewItem>
     ) {
         val output = thisDate.format(DateTimeFormatter.ofPattern("MMM dd"))
-        viewItems.add(BudgetViewItem(output, BudgetViewType.HEADER))
+        viewItems.add(BudgetViewItem(null, output, BudgetViewType.HEADER))
     }
 
     fun toBudgetViewItemListCompressDays(items: List<BudgetItem>): List<BudgetViewItem> {
@@ -78,10 +78,10 @@ object BudgetItemMapper {
                     if (thisDate.dayOfYear == Instant.now().atZone(ZoneId.systemDefault()).dayOfYear) {
                         val f = DateTimeFormatter.ofPattern("MM/dd/uuuu")
                         val output = thisDate.format(f)
-                        viewItems.add(BudgetViewItem(output, BudgetViewType.HEADER))
-                        viewItems.add(BudgetViewItem("${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
+                        viewItems.add(BudgetViewItem(null, output, BudgetViewType.HEADER))
+                        viewItems.add(BudgetViewItem(budgetItem.id,"${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
                     } else {
-                        viewItems.add(BudgetViewItem("${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
+                        viewItems.add(BudgetViewItem(budgetItem.id,"${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
                     }
                 } else {
                     TODO("VERSION.SDK_INT < O")
@@ -94,8 +94,8 @@ object BudgetItemMapper {
 
                     val f = DateTimeFormatter.ofPattern("MM/dd/uuuu")
                     val output = thisDate.format(f)
-                    viewItems.add(BudgetViewItem(output, BudgetViewType.HEADER))
-                    viewItems.add(BudgetViewItem("${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
+                    viewItems.add(BudgetViewItem(null, output, BudgetViewType.HEADER))
+                    viewItems.add(BudgetViewItem(budgetItem.id,"${budgetItem.name} : ${budgetItem.cost}", BudgetViewType.ITEM))
                 } else {
                     TODO("VERSION.SDK_INT < O")
                 }

@@ -16,11 +16,13 @@ enum class BudgetViewType {
 }
 
 data class BudgetViewItem(
+    val id: Int?,
     val value: String,
     val type: BudgetViewType
 )
 
 data class BudgetItem(
+    val id: Int?,
     val name: String,
     val cost: Double,
     val time: Long
@@ -133,7 +135,7 @@ class BudgetItemViewModel(
             }
         }
 
-        return BudgetItem(subject!!, amount!!, System.currentTimeMillis())
+        return BudgetItem(null, subject!!, amount!!, System.currentTimeMillis())
     }
 
     companion object : MvRxViewModelFactory<BudgetItemViewModel, BudgetItemState> {

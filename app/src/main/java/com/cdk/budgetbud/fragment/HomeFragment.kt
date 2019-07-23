@@ -1,4 +1,4 @@
-package com.cdk.budgetbud
+package com.cdk.budgetbud.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import com.airbnb.mvrx.activityViewModel
+import com.cdk.budgetbud.BaseFragment
+import com.cdk.budgetbud.R
 import com.cdk.budgetbud.mvrx.KeyedListener
 import com.cdk.budgetbud.mvrx.simpleController
 import com.cdk.budgetbud.view.commonCardView
@@ -63,7 +65,9 @@ class HomeFragment : BaseFragment() {
                         KeyedListener.create(
                             budgetItem,
                             View.OnClickListener {
-
+                                navigateTo(
+                                    R.id.action_homeFragment_to_budgetItemFragment,
+                                    Bundle().apply { putInt(ID, budgetItem.id!!) })
                             })
                     )
                 }
@@ -72,6 +76,8 @@ class HomeFragment : BaseFragment() {
     }
 
     companion object {
+        const val ID = "id"
+
         private val tensNames =
             mapOf(
                 "" to 0,
