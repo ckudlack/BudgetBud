@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import com.airbnb.mvrx.activityViewModel
+import com.cdk.budgetbud.mvrx.KeyedListener
 import com.cdk.budgetbud.mvrx.simpleController
+import com.cdk.budgetbud.view.commonCardView
 import com.cdk.budgetbud.view.commonTextView
 import com.cdk.budgetbud.viewmodel.BudgetItemViewModel
 import com.cdk.budgetbud.viewmodel.BudgetViewType
@@ -53,10 +55,17 @@ class HomeFragment : BaseFragment() {
                     body(budgetItem.value)
                     textAppearance(R.style.BudgetItemHeader)
                 }
-                BudgetViewType.ITEM -> commonTextView {
+                BudgetViewType.ITEM -> commonCardView {
                     id("id_$index")
                     body(budgetItem.value)
-                    textAppearance(R.style.BudgetItem)
+                    bodyTextAppearance(R.style.BudgetItem)
+                    onClickListener(
+                        KeyedListener.create(
+                            budgetItem,
+                            View.OnClickListener {
+
+                            })
+                    )
                 }
             }
         }
